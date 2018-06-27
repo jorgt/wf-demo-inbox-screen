@@ -6,40 +6,23 @@ sap.ui.define([
 
 	return Controller.extend("demo.inbox.screen.controller.App", {
 		onInit: function() {
-			// call the base component's init function
 
-			// set the device model
-
+			//get the component's startup parameters. this includes the inbox API's and 
+			//the task details
 			var startupParameters = this.getOwnerComponent().getComponentData().startupParameters;
 			var taskModel = startupParameters.taskModel;
 			var taskId = taskModel.getData().InstanceID;
+
+			//create a model for the current task context and load from the API
 			var contextModel = new sap.ui.model.json.JSONModel("/bpmworkflowruntime/rest/v1/task-instances/" + taskId + "/context");
-			if (!this._oUploadItemTemplate) {
-				this._oUploadItemTemplate = sap.ui.xmlfragment(
-					"demo.inbox.screen.view.UploadCollectionItem", this);
-			}
+
+			//when the context is loaded, add it to the view
 			contextModel.attachRequestCompleted(function(oEvent) {
 				var data = oEvent.getSource().getData();
-				
 				this.getView().setModel(contextModel);
-				this.getView().byId('upload').bindItems({
-					model: 'poc',
-					path: '/AttachmentSet',
-					filters: [new Filter("Workflowid", "EQ", data.Vendor.TempId)],
-					template: this._oUploadItemTemplate,
-					events: {
-						dataChanged: function() {
-							console.log("Attachments load finished");
-						}.bind(this),
-						dataReceived: function() {
-							console.log("Attachments load finished");
-						}.bind(this),
-						dataRequested: function() {
-							console.log("Attachment load started");
-						}.bind(this)
-					}
-				 });
 			}.bind(this));
+            
+            //from the API, add approve and reject buttons to the screen
 			startupParameters.inboxAPI.addAction({
 				action: "Reject",
 				type: "Reject",
@@ -56,6 +39,7 @@ sap.ui.define([
 				this._completeTask(taskId, true);
 			}, this);
 		},
+
 		_completeTask: function(taskId, approvalStatus) {
 			var token = this._fetchToken();
 			$.ajax({
@@ -95,25 +79,6 @@ sap.ui.define([
 
 		_refreshTask: function(taskId) {
 			this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.updateTask("NA", taskId);
-		},
-		/**
-		 * Creates the URL for an attachment
-		 * @name   encollab.dp.wty.Detail#attachmentURL
-		 * @param {string} docid
-		 * @method
-		 */
-		attachmentURL: function(docid) {
-			return this.getView().getModel('poc').sServiceUrl + "/AttachmentSet('" + docid + "')/$value";
-		},
-		/**
-		 * Creates the URL for an attachment
-		 * @name   encollab.dp.wty.Detail#thumbnailURL
-		 * @param {string} mimetype
-		 * @param {string} docid
-		 * @method
-		 */
-		thumbnailURL: function(mimetype, docid) {
-			return mimetype.substr(0, 5) === 'image' ? this.attachmentURL(docid) : null;
 		}
 	});
 });

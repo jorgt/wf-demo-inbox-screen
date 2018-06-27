@@ -1,64 +1,47 @@
-<mvc:View controllerName="demo.inbox.screen.controller.App" xmlns:html="http://www.w3.org/1999/xhtml"
-	xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:uxap="sap.uxap" >
-
-			<uxap:ObjectPageLayout showFooter="true">
-				<uxap:headerTitle>
-					<uxap:ObjectPageHeader objectTitle="Vendor Creation Approval PoC"/>
-				</uxap:headerTitle>
-				<uxap:headerContent>
-					<ObjectAttribute title="Vendor Creation Approval for new Vendor '{/Vendor/Name}'" text="Requested by Jorg" />
-				</uxap:headerContent>
-				<uxap:sections>
-					<uxap:ObjectPageSection title="Request">
-						<uxap:subSections>
-							<uxap:ObjectPageSubSection title="Vendor">
-								<uxap:blocks>
-									<f:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4"
-										labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
-										singleContainerFullSize="false">
-										<f:content>
-											<Label text="Name"/>
-											<Text text="{/Vendor/Name}"/>
-											<Label text="Address"/>
-											<Text text="{/Vendor/Street} {/Vendor/HouseNumber}"/>
-											<Label text="City"/>
-											<Text text="{/Vendor/City}"/>
-										</f:content>
-									</f:SimpleForm>	
-								</uxap:blocks>
-							</uxap:ObjectPageSubSection>
-							<uxap:ObjectPageSubSection title="Requestor">
-								<uxap:blocks>
-									<f:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4"
-										labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
-										singleContainerFullSize="false">
-										<f:content>
-											<Label text="Name"/>
-											<Text text="Jorg Thuijls"/>
-											<Label text="Phone number"/>
-											<Text text="04 0000000"/>
-											<Label text="Email Address"/>
-											<Text text="jorg@encollab.com"/>
-										</f:content>
-									</f:SimpleForm>
-								</uxap:blocks>
-							</uxap:ObjectPageSubSection>
-							<uxap:ObjectPageSubSection id="uploadBlock" title="Documents">
-								<uxap:blocks>
-									<UploadCollection
-										uploadEnabled="false"
-										id="upload" 
-										uploadUrl="/SAP_Gateway/odata/SAP/YPOC_APPROVER_SRV/AttachmentSet" 
-										mode="None"
-										uploadComplete="onAttachUploadComplete"
-										visibleDelete="false"
-										visibleEdit="false">
-											
-									</UploadCollection>
-								</uxap:blocks>
-							</uxap:ObjectPageSubSection>
-						</uxap:subSections>
-					</uxap:ObjectPageSection>
-				</uxap:sections>
-			</uxap:ObjectPageLayout>
+<mvc:View controllerName="demo.inbox.screen.controller.App" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc"
+	displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:uxap="sap.uxap">
+	<uxap:ObjectPageLayout showFooter="true">
+		<uxap:headerTitle>
+			<uxap:ObjectPageHeader objectTitle="Demo inbox screen"/>
+		</uxap:headerTitle>
+		<uxap:headerContent>
+			<ObjectAttribute title="Address approval for '{/Vendor/Name}'" text="Requested by Jorg"/>
+		</uxap:headerContent>
+		<uxap:sections>
+			<uxap:ObjectPageSection title="Request">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection title="Address">
+						<uxap:blocks>
+							<f:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+								adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
+								singleContainerFullSize="false">
+								<f:content>
+									<Label text="Name"/>
+									<Text text="{/Vendor/Name}"/>
+									<Label text="Address"/>
+									<Text text="{/Vendor/Street} {/Vendor/HouseNumber}"/>
+									<Label text="City"/>
+									<Text text="{/Vendor/City}"/>
+								</f:content>
+							</f:SimpleForm>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+					<uxap:ObjectPageSubSection title="Requestor">
+						<uxap:blocks>
+							<f:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12"
+								adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
+								singleContainerFullSize="false">
+								<f:content>
+									<Label text="Name"/>
+									<Text text="{/Requestor/Name}"/>
+									<Label text="Email Address"/>
+									<Text text="{/Requestor/Email}"/>
+								</f:content>
+							</f:SimpleForm>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+		</uxap:sections>
+	</uxap:ObjectPageLayout>
 </mvc:View>
