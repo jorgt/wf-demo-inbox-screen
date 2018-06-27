@@ -1,0 +1,75 @@
+<mvc:View controllerName="demo.app.controller.App"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core" xmlns:uxap="sap.uxap" xmlns="sap.m" displayBlock="true">
+	<App>
+		<pages>
+			<uxap:ObjectPageLayout showFooter="true">
+				<uxap:headerTitle>
+					<uxap:ObjectPageHeader objectTitle="Vendor Creation Approval PoC"/>
+				</uxap:headerTitle>
+				<uxap:headerContent>
+					<ObjectAttribute title="Vendor Creation Approval" text="This form serves as a proof-of-concept on how to use SCP workflow"/>
+				</uxap:headerContent>
+				<uxap:sections>
+					<uxap:ObjectPageSection title="Vendor">
+						<uxap:subSections>
+							<uxap:ObjectPageSubSection title="Vendor Information">
+								<uxap:blocks>
+									<f:SimpleForm id="vendorInputForm" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4"
+										labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
+										singleContainerFullSize="false">
+										<f:content>
+											<Label text="Name" required="true"/>
+											<Input value="{/vendor/Name}" liveChange="onVerifyVendor"/>
+											<Label text="Street/No." required="true"/>
+											<Input value="{/vendor/Street}"></Input>
+											<Input value="{/vendor/HouseNumber}" type="Number" liveChange="onVerifyVendor">
+												<layoutData>
+													<l:GridData span="XL2 L1 M3 S4"/>
+												</layoutData>
+											</Input>
+											<Label text="Post Code/City" required="true"/>
+											<Input value="{/vendor/PostCode}" type="Number" liveChange="onVerifyVendor">
+												<layoutData>
+													<l:GridData span="XL2 L1 M3 S4"/>
+												</layoutData>
+											</Input>
+											<Input value="{/vendor/City}" liveChange="onVerifyVendor"/>
+											<Label text="Country" required="true"/>
+											<Select id="country" selectedKey="{/vendor/Country}" change="onVerifyVendor">
+												<items>
+													<core:Item text="Australia" key="Australia"/>
+													<core:Item text="New Zealand" key="New Zealand"/>
+												</items>
+											</Select>
+										</f:content>
+									</f:SimpleForm>
+								</uxap:blocks>
+							</uxap:ObjectPageSubSection>
+							<uxap:ObjectPageSubSection id="uploadBlock" title="Documents">
+								<uxap:blocks>
+									<UploadCollection 
+									id="upload" 
+									beforeUploadStarts="beforeUploadStarts" 
+									uploadUrl="/SAP_Gateway/odata/SAP/YPOC_APPROVER_SRV/AttachmentSet" 
+									change="onAttachUploadChange" 
+									fileDeleted="onAttachDelete"
+									mode="None"
+									uploadComplete="onAttachUploadComplete">
+										
+									</UploadCollection>
+								</uxap:blocks>
+							</uxap:ObjectPageSubSection>
+						</uxap:subSections>
+					</uxap:ObjectPageSection>
+				</uxap:sections>
+				<uxap:footer>
+					<Toolbar>
+						<ToolbarSpacer/>
+						<Button type="Accept" text="Submit" press="onSubmitButtonPress" enabled="{/submitEnabled}"/>
+					</Toolbar>
+				</uxap:footer>
+			</uxap:ObjectPageLayout>
+		</pages>
+	</App>
+</mvc:View>

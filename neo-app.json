@@ -1,0 +1,41 @@
+{
+  "welcomeFile": "/webapp/index.html",
+  "routes": [
+    {
+      "path": "/resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/resources"
+      },
+      "description": "SAPUI5 Resources"
+    },
+    {
+      "path": "/test-resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/test-resources"
+      },
+      "description": "SAPUI5 Test Resources"
+    },
+    {
+      "path": "bpmworkflowruntime",
+      "target": {
+        "type": "destination",
+        "name": "bpmworkflowruntime",
+        "entryPath": "/workflow-service"
+      },
+      "description": "Workflow Service Runtime"
+    },
+    {
+      "path": "/SAP_Gateway",
+      "target": {
+        "type": "destination",
+        "name": "SAP_Gateway"
+      },
+      "description": "GWaaS - SAP Gateway"
+    }
+  ],
+  "sendWelcomeFileRedirect": true
+}
