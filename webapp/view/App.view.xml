@@ -1,75 +1,64 @@
-<mvc:View controllerName="demo.app.controller.App"
-	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc"
-	xmlns:core="sap.ui.core" xmlns:uxap="sap.uxap" xmlns="sap.m" displayBlock="true">
-	<App>
-		<pages>
+<mvc:View controllerName="demo.inbox.screen.controller.App" xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:uxap="sap.uxap" >
+
 			<uxap:ObjectPageLayout showFooter="true">
 				<uxap:headerTitle>
 					<uxap:ObjectPageHeader objectTitle="Vendor Creation Approval PoC"/>
 				</uxap:headerTitle>
 				<uxap:headerContent>
-					<ObjectAttribute title="Vendor Creation Approval" text="This form serves as a proof-of-concept on how to use SCP workflow"/>
+					<ObjectAttribute title="Vendor Creation Approval for new Vendor '{/Vendor/Name}'" text="Requested by Jorg" />
 				</uxap:headerContent>
 				<uxap:sections>
-					<uxap:ObjectPageSection title="Vendor">
+					<uxap:ObjectPageSection title="Request">
 						<uxap:subSections>
-							<uxap:ObjectPageSubSection title="Vendor Information">
+							<uxap:ObjectPageSubSection title="Vendor">
 								<uxap:blocks>
-									<f:SimpleForm id="vendorInputForm" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4"
+									<f:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4"
 										labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
 										singleContainerFullSize="false">
 										<f:content>
-											<Label text="Name" required="true"/>
-											<Input value="{/vendor/Name}" liveChange="onVerifyVendor"/>
-											<Label text="Street/No." required="true"/>
-											<Input value="{/vendor/Street}"></Input>
-											<Input value="{/vendor/HouseNumber}" type="Number" liveChange="onVerifyVendor">
-												<layoutData>
-													<l:GridData span="XL2 L1 M3 S4"/>
-												</layoutData>
-											</Input>
-											<Label text="Post Code/City" required="true"/>
-											<Input value="{/vendor/PostCode}" type="Number" liveChange="onVerifyVendor">
-												<layoutData>
-													<l:GridData span="XL2 L1 M3 S4"/>
-												</layoutData>
-											</Input>
-											<Input value="{/vendor/City}" liveChange="onVerifyVendor"/>
-											<Label text="Country" required="true"/>
-											<Select id="country" selectedKey="{/vendor/Country}" change="onVerifyVendor">
-												<items>
-													<core:Item text="Australia" key="Australia"/>
-													<core:Item text="New Zealand" key="New Zealand"/>
-												</items>
-											</Select>
+											<Label text="Name"/>
+											<Text text="{/Vendor/Name}"/>
+											<Label text="Address"/>
+											<Text text="{/Vendor/Street} {/Vendor/HouseNumber}"/>
+											<Label text="City"/>
+											<Text text="{/Vendor/City}"/>
+										</f:content>
+									</f:SimpleForm>	
+								</uxap:blocks>
+							</uxap:ObjectPageSubSection>
+							<uxap:ObjectPageSubSection title="Requestor">
+								<uxap:blocks>
+									<f:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4"
+										labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
+										singleContainerFullSize="false">
+										<f:content>
+											<Label text="Name"/>
+											<Text text="Jorg Thuijls"/>
+											<Label text="Phone number"/>
+											<Text text="04 0000000"/>
+											<Label text="Email Address"/>
+											<Text text="jorg@encollab.com"/>
 										</f:content>
 									</f:SimpleForm>
 								</uxap:blocks>
 							</uxap:ObjectPageSubSection>
 							<uxap:ObjectPageSubSection id="uploadBlock" title="Documents">
 								<uxap:blocks>
-									<UploadCollection 
-									id="upload" 
-									beforeUploadStarts="beforeUploadStarts" 
-									uploadUrl="/SAP_Gateway/odata/SAP/YPOC_APPROVER_SRV/AttachmentSet" 
-									change="onAttachUploadChange" 
-									fileDeleted="onAttachDelete"
-									mode="None"
-									uploadComplete="onAttachUploadComplete">
-										
+									<UploadCollection
+										uploadEnabled="false"
+										id="upload" 
+										uploadUrl="/SAP_Gateway/odata/SAP/YPOC_APPROVER_SRV/AttachmentSet" 
+										mode="None"
+										uploadComplete="onAttachUploadComplete"
+										visibleDelete="false"
+										visibleEdit="false">
+											
 									</UploadCollection>
 								</uxap:blocks>
 							</uxap:ObjectPageSubSection>
 						</uxap:subSections>
 					</uxap:ObjectPageSection>
 				</uxap:sections>
-				<uxap:footer>
-					<Toolbar>
-						<ToolbarSpacer/>
-						<Button type="Accept" text="Submit" press="onSubmitButtonPress" enabled="{/submitEnabled}"/>
-					</Toolbar>
-				</uxap:footer>
 			</uxap:ObjectPageLayout>
-		</pages>
-	</App>
 </mvc:View>

@@ -1,7 +1,7 @@
 {
 	"_version": "1.5.0",
 	"sap.app": {
-		"id": "demo.app",
+		"id": "demo.inbox.screen",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"applicationVersion": {
@@ -15,7 +15,7 @@
 		},
 		"dataSources": {
 			"YPOC_APPROVER_SRV": {
-				"uri": "/SAP_Gateway/odata/SAP/YPOC_APPROVER_SRV;v=1/",
+				"uri": "/../demotoyotavendorapp/SAP_Gateway/odata/SAP/YPOC_APPROVER_SRV;v=1/",
 				"type": "OData",
 				"settings": {
 					"odataVersion": "2.0",
@@ -46,7 +46,7 @@
 	},
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "demo.app.view.App",
+			"viewName": "demo.inbox.screen.view.App",
 			"type": "XML"
 		},
 		"dependencies": {
@@ -69,7 +69,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "demo.app.i18n.i18n"
+					"bundleName": "demo.inbox.screen.i18n.i18n"
 				}
 			},
 			"poc": {

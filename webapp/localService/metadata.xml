@@ -23,8 +23,29 @@
                 <Property Name="FaxExtens" Type="Edm.String" Nullable="false" MaxLength="10" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:label="Extension"/>
                 <Property Name="EMail" Type="Edm.String" Nullable="false" MaxLength="241" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:label="E-Mail Address"/>
             </EntityType>
+            <EntityType Name="Attachment" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="FileName"/>
+                </Key>
+                <Property Name="Workflowid" Type="Edm.String" Nullable="false" MaxLength="32" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:label="Character field, length 32"/>
+                <Property Name="FileName" Type="Edm.String" Nullable="false" MaxLength="50" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:label="c"/>
+                <Property Name="Mimetype" Type="Edm.String" Nullable="false" MaxLength="50" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:label="c"/>
+                <Property Name="Value" Type="Edm.Binary" Nullable="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:label="file"/>
+            </EntityType>
+            <EntityType Name="Vendor" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Vendorno"/>
+                </Key>
+                <Property Name="Vendorno" Type="Edm.String" Nullable="false" MaxLength="10" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:label="Vendor"/>
+                <Property Name="Name" Type="Edm.String" Nullable="false" MaxLength="40" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:label="Name"/>
+                <Property Name="Street" Type="Edm.String" Nullable="false" MaxLength="60" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:label="Street"/>
+                <Property Name="StreetNo" Type="Edm.String" Nullable="false" MaxLength="12" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:label="Street Code"/>
+                <Property Name="PostlCod1" Type="Edm.String" Nullable="false" MaxLength="10" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:label="Postal Code"/>
+            </EntityType>
             <EntityContainer Name="YPOC_APPROVER_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
                 <EntitySet Name="ApproverSet" EntityType="YPOC_APPROVER_SRV.Approver" sap:content-version="1" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false"/>
+                <EntitySet Name="AttachmentSet" EntityType="YPOC_APPROVER_SRV.Attachment" sap:content-version="1" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false"/>
+                <EntitySet Name="VendorSet" EntityType="YPOC_APPROVER_SRV.Vendor" sap:content-version="1" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false"/>
             </EntityContainer>
             <atom:link
                 xmlns:atom="http://www.w3.org/2005/Atom" rel="self" href="https://gwaas-s0014314774trial.hanatrial.ondemand.com:443/odata/SAP/YPOC_APPROVER_SRV;v=1/$metadata"/>

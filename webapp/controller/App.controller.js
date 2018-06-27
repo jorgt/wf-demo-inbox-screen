@@ -1,98 +1,80 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/ui/model/json/JSONModel",
-	"sap/m/MessageToast",
-	"sap/ui/model/FilterOperator",
-	"sap/m/UploadCollectionParameter"
-], function(Controller, JSONModel, Toast, FilterOperator, UploadCollectionParameter) {
+	"sap/ui/model/Filter"
+], function(Controller, Filter) {
 	"use strict";
 
-	return Controller.extend("demo.app.controller.App", {
+	return Controller.extend("demo.inbox.screen.controller.App", {
 		onInit: function() {
-			var id = (Math.round(Math.random() * Number.MAX_SAFE_INTEGER)).toString(16);
+			// call the base component's init function
+
+			// set the device model
+
+			var startupParameters = this.getOwnerComponent().getComponentData().startupParameters;
+			var taskModel = startupParameters.taskModel;
+			var taskId = taskModel.getData().InstanceID;
+			var contextModel = new sap.ui.model.json.JSONModel("/bpmworkflowruntime/rest/v1/task-instances/" + taskId + "/context");
 			if (!this._oUploadItemTemplate) {
 				this._oUploadItemTemplate = sap.ui.xmlfragment(
-					"demo.app.view.UploadCollectionItem", this);
+					"demo.inbox.screen.view.UploadCollectionItem", this);
 			}
+			contextModel.attachRequestCompleted(function(oEvent) {
+				var data = oEvent.getSource().getData();
+				
+				this.getView().setModel(contextModel);
+				this.getView().byId('upload').bindItems({
+					model: 'poc',
+					path: '/AttachmentSet',
+					filters: [new Filter("Workflowid", "EQ", data.Vendor.TempId)],
+					template: this._oUploadItemTemplate,
+					events: {
+						dataChanged: function() {
+							console.log("Attachments load finished");
+						}.bind(this),
+						dataReceived: function() {
+							console.log("Attachments load finished");
+						}.bind(this),
+						dataRequested: function() {
+							console.log("Attachment load started");
+						}.bind(this)
+					}
+				 });
+			}.bind(this));
+			startupParameters.inboxAPI.addAction({
+				action: "Reject",
+				type: "Reject",
+				label: "Reject"
+			}, function() {
+				this._completeTask(taskId, false);
+			}, this);
 
-			this.getView().setModel(new JSONModel({
-				vendor: {
-					TempId: id,
-					Name: '',
-					Street: '',
-					HouseNumber: '',
-					PostCode: '',
-					City: '',
-					Country: 'Australia'
-				},
-				submitEnabled: false
-			}));
-			
-			this.getView().byId("uploadBlock").setBusyIndicatorDelay(0).setBusy(true);
-			this.getView().byId('upload').bindItems({
-				model: 'poc',
-				path: '/AttachmentSet',
-				filters: [new sap.ui.model.Filter("Workflowid", "EQ", id)],
-				template: this._oUploadItemTemplate,
-				events: {
-					dataChanged: function() {
-						console.log("Attachments load finished");
-						this.getView().byId("uploadBlock").setBusy(false);
-					}.bind(this),
-					dataReceived: function() {
-						console.log("Attachments load finished");
-						this.getView().byId("uploadBlock").setBusy(false);
-					}.bind(this),
-					dataRequested: function() {
-						console.log("Attachment load started");
-						this.getView().byId("uploadBlock").setBusy(false);	
-					}.bind(this)
-				}
-			});
+			startupParameters.inboxAPI.addAction({
+				action: "Approve",
+				type: "Accept",
+				label: "Approve"
+			}, function() {
+				this._completeTask(taskId, true);
+			}, this);
 		},
-
-		onSubmitButtonPress: function() {
-			this._startInstance(this._fetchToken());
-			//this._fetchToken(this._startInstance);
-		},
-
-		onVerifyVendor: function() {
-			var fields = this.getView().byId('vendorInputForm').getContent();
-			this.getView().getModel().setProperty('/submitEnabled', true);
-
-			for (var i = 0; i < fields.length; i++) {
-				if (fields[i].getValue && fields[i].getValue().trim() === '') {
-					this.getView().getModel().setProperty('/submitEnabled', false);
-				}
-			}
-		},
-
-		startWorkflow: function() {
-			//this._fetchToken(this._startInstance);
-			this._startInstance(this._fetchToken());
-		},
-
-		_startInstance: function(token) {
-			//var model = this.getView().getModel();
+		_completeTask: function(taskId, approvalStatus) {
+			var token = this._fetchToken();
 			$.ajax({
-				url: "/bpmworkflowruntime/rest/v1/workflow-instances",
-				method: "POST",
-				async: false,
+				url: "/bpmworkflowruntime/rest/v1/task-instances/" + taskId,
+				method: "PATCH",
 				contentType: "application/json",
-				headers: {
-					"X-CSRF-Token": token
-				},
+				async: false,
+				//data: "{\"status\": \"COMPLETED\", \"context\": {\"approved\":\"" + approvalStatus + "\"}}",
 				data: JSON.stringify({
-					definitionId: "testworkflowpoc",
+					status: "COMPLETED",
 					context: {
-						Vendor: this.getView().getModel().getData().vendor
+						approved: approvalStatus
 					}
 				}),
-				success: function(result) {
-					Toast.show('Workflow started with id: ' + result.id);
-					//model.setProperty("/result", JSON.stringify(result, null, 4));
+				headers: {
+					"X-CSRF-Token": token
 				}
 			});
+			this._refreshTask(taskId);
 		},
 
 		_fetchToken: function() {
@@ -110,49 +92,9 @@ sap.ui.define([
 			});
 			return token;
 		},
-		/**
-		 * Callback for upload change.
-		 * @name   encollab.dp.wty.Detail#onAttachUploadChange
-		 * @param {sap.ui.core.Event} oEvent
-		 * @method
-		 */
-		onAttachUploadChange: function(oEvent) {
-			this.getView().byId("uploadBlock").setBusy(true);
-			var csrf = this.getView().getModel('poc').getSecurityToken();
-			var oUploader = oEvent.getSource();
-			var fileName = oEvent.getParameter('files')[0].name;
-			var tempId = this.getView().getModel().getProperty("/vendor/TempId");
-			oUploader.removeAllHeaderParameters();
-			oUploader.insertHeaderParameter(new UploadCollectionParameter({
-				name: 'x-csrf-token',
-				value: csrf
-			}));
-			oUploader.insertHeaderParameter(new UploadCollectionParameter({
-				name: 'Slug',
-				value: tempId + "|" + fileName
-			}));
-		},
-		onAttachUploadComplete: function() {
-			this.getView().byId("uploadBlock").setBusy(true);
-			 this.getView().getModel("poc").refresh();
-		},
-		/**
-		 * Callback for upload delete.
-		 * @name   encollab.dp.wty.Detail#onAttachDelete
-		 * @param {sap.ui.core.Event} oEvent
-		 * @method
-		 */
-		onAttachDelete: function(oEvent) {
-			var sPath = oEvent.getParameter('item').getBindingContext('poc').getPath();
-			var oModel = this.getView().getModel('poc');
-			oModel.remove(sPath, {
-				success: jQuery.proxy(function() {
-					oModel.refresh();
-				}, this),
-				error: jQuery.proxy(function() {
-					
-				}, this)
-			});
+
+		_refreshTask: function(taskId) {
+			this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.updateTask("NA", taskId);
 		},
 		/**
 		 * Creates the URL for an attachment
