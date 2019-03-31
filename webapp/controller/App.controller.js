@@ -1,11 +1,11 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/Filter"
-], function(Controller, Filter) {
+], function (Controller, Filter) {
 	"use strict";
 
 	return Controller.extend("demo.inbox.screen.controller.App", {
-		onInit: function() {
+		onInit: function () {
 
 			//get the component's startup parameters. this includes the inbox API's and 
 			//the task details
@@ -17,17 +17,17 @@ sap.ui.define([
 			var contextModel = new sap.ui.model.json.JSONModel("/bpmworkflowruntime/rest/v1/task-instances/" + taskId + "/context");
 
 			//when the context is loaded, add it to the view
-			contextModel.attachRequestCompleted(function(oEvent) {
-				var data = oEvent.getSource().getData();
+			contextModel.attachRequestCompleted(function (oEvent) {
+				//var data = oEvent.getSource().getData();
 				this.getView().setModel(contextModel);
 			}.bind(this));
-            
-            //from the API, add approve and reject buttons to the screen
+
+			//from the API, add approve and reject buttons to the screen
 			startupParameters.inboxAPI.addAction({
 				action: "Reject",
 				type: "Reject",
 				label: "Reject"
-			}, function() {
+			}, function () {
 				this._completeTask(taskId, false);
 			}, this);
 
@@ -35,12 +35,12 @@ sap.ui.define([
 				action: "Approve",
 				type: "Accept",
 				label: "Approve"
-			}, function() {
+			}, function () {
 				this._completeTask(taskId, true);
 			}, this);
 		},
 
-		_completeTask: function(taskId, approvalStatus) {
+		_completeTask: function (taskId, approvalStatus) {
 			var token = this._fetchToken();
 			$.ajax({
 				url: "/bpmworkflowruntime/rest/v1/task-instances/" + taskId,
@@ -61,7 +61,7 @@ sap.ui.define([
 			this._refreshTask(taskId);
 		},
 
-		_fetchToken: function() {
+		_fetchToken: function () {
 			var token;
 			$.ajax({
 				url: "/bpmworkflowruntime/rest/v1/xsrf-token",
@@ -70,14 +70,14 @@ sap.ui.define([
 				headers: {
 					"X-CSRF-Token": "Fetch"
 				},
-				success: function(result, xhr, data) {
+				success: function (result, xhr, data) {
 					token = data.getResponseHeader("X-CSRF-Token");
 				}
 			});
 			return token;
 		},
 
-		_refreshTask: function(taskId) {
+		_refreshTask: function (taskId) {
 			this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.updateTask("NA", taskId);
 		}
 	});

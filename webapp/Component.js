@@ -1,8 +1,8 @@
 sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
-	"demo/toyota/inbox/screen/model/models"
-], function(UIComponent, Device, models) {
+	"demo/inbox/screen/model/models"
+], function (UIComponent, Device, models) {
 	"use strict";
 
 	return UIComponent.extend("demo.inbox.screen.Component", {
@@ -16,9 +16,9 @@ sap.ui.define([
 		 * @public
 		 * @override
 		 */
-		init: function() {
+		init: function () {
 			UIComponent.prototype.init.apply(this, arguments);
-			
+
 			this.setModel(models.createDeviceModel(), "device");
 		}
 	});

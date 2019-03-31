@@ -18,6 +18,8 @@
 								<f:content>
 									<Label text="Name"/>
 									<Text text="{/Vendor/Name}"/>
+									<Label text="Cost Centre"/>
+									<Text text="{/Vendor/costCentre}"/>
 									<Label text="Address"/>
 									<Text text="{/Vendor/Street} {/Vendor/HouseNumber}"/>
 									<Label text="City"/>
@@ -26,16 +28,20 @@
 							</f:SimpleForm>
 						</uxap:blocks>
 					</uxap:ObjectPageSubSection>
-					<uxap:ObjectPageSubSection title="Requestor">
+					<uxap:ObjectPageSubSection title="Previous task">
 						<uxap:blocks>
 							<f:SimpleForm editable="false" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12"
 								adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1"
 								singleContainerFullSize="false">
 								<f:content>
-									<Label text="Name"/>
-									<Text text="{/Requestor/Name}"/>
-									<Label text="Email Address"/>
-									<Text text="{/Requestor/Email}"/>
+									<Label text="Task"/>
+									<Text text="{/lastTask/subject}"/>
+									<Label text="User"/>
+									<Text text="{/lastTask/recipientUsers/0}"/>
+									<Label text="Created at"/>
+									<Text text="{/lastTask/createdAt}"/>
+									<Label text="Completed at"/>
+									<Text text="{/lastTask/completedAt}"/>
 								</f:content>
 							</f:SimpleForm>
 						</uxap:blocks>

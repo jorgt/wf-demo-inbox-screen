@@ -13,16 +13,7 @@
 			"id": "servicecatalog.connectivityComponent",
 			"version": "0.0.0"
 		},
-		"dataSources": {
-			"YPOC_APPROVER_SRV": {
-				"uri": "/../demotoyotavendorapp/SAP_Gateway/odata/SAP/YPOC_APPROVER_SRV;v=1/",
-				"type": "OData",
-				"settings": {
-					"odataVersion": "2.0",
-					"localUri": "localService/metadata.xml"
-				}
-			}
-		}
+		"dataSources": {}
 	},
 	"sap.ui": {
 		"technology": "UI5",
@@ -70,12 +61,6 @@
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
 					"bundleName": "demo.inbox.screen.i18n.i18n"
-				}
-			},
-			"poc": {
-				"dataSource": "YPOC_APPROVER_SRV",
-				"settings": {
-					"json": true
 				}
 			}
 		},
